@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rainbow Legacy Lite</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at 30% 20%, #0a0a0f, #000);
+      color: #eaeaea;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 1s ease;
+    }
+
+    header {
+      margin-top: 70px;
+      font-size: 2.4rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, 
+        #ff0000, #ff7a00, #ffee00, #00ff00, 
+        #00ffff, #0055ff, #9b00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-align: center;
+      animation: shimmer 6s linear infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    nav {
+      margin-top: 30px;
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #aaa;
+      font-weight: 400;
+      transition: 0.3s;
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+    }
+
+    nav a:hover {
+      color: #fff;
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
+    }
+
+    main {
+      max-width: 850px;
+      text-align: center;
+      margin-top: 4rem;
+      padding: 0 1.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 2s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      color: #ffffffcc;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    p {
+      color: #b0b0b0;
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+
+    .gradient-line {
+      height: 2px;
+      width: 200px;
+      margin: 2rem auto;
+      background: linear-gradient(90deg, 
+        #ff0000, #ff7a00, #ffee00, #00ff00, 
+        #00ffff, #0055ff, #9b00ff);
+      border-radius: 4px;
+      animation: flow 3s linear infinite;
+      background-size: 200%;
+    }
+
+    @keyframes flow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    footer {
+      margin-top: auto;
+      font-size: 0.8rem;
+      color: #666;
+      padding: 2.5rem 0;
+    }
+
+    .tagline {
+      font-style: italic;
+      font-size: 1rem;
+      color: #ddd;
+      opacity: 0.8;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particles"></canvas>
+
+  <header>Rainbow Legacy Lite</header>
+  <div class="tagline">“Every color tells a memory.”</div>
+
+  <nav>
+    <a href="#" onclick="show('home')">Home</a>
+    <a href="#" onclick="show('devlog')">Devlog</a>
+    <a href="#" onclick="show('gallery')">Gallery</a>
+    <a href="#" onclick="show('about')">About</a>
+  </nav>
+
+  <main id="home">
+    <div class="gradient-line"></div>
+    <h2>Welcome to a journey built from emotions.</h2>
+    <p>
+      <strong>Rainbow Legacy Lite</strong> is an indie first-person experience, created entirely from a phone.<br>
+      Every scene, every prism, every shade of color — reflects the soul of <strong>hope, loss, and rebirth.</strong><br><br>
+      This is not just a game. It’s a legacy of feelings turned into light.
+    </p>
+  </main>
+
+  <main id="devlog" style="display:none;">
+    <div class="gradient-line"></div>
+    <h2>Development Journal</h2>
+    <p>
+      Follow the progress of <strong>irCYStudio</strong> — from sketches to full release.<br>
+      Devlogs will capture the raw emotions behind each build, struggle, and breakthrough.
+    </p>
+  </main>
+
+  <main id="gallery" style="display:none;">
+    <div class="gradient-line"></div>
+    <h2>Gallery</h2>
+    <p>Sneak peeks, teaser shots, and unseen moments from Rainbow Legacy’s world.</p>
+  </main>
+
+  <main id="about" style="display:none;">
+    <div class="gradient-line"></div>
+    <h2>About irCYStudio</h2>
+    <p>
+      A one-person dream by <strong>kyy</strong>, built entirely on mobile.<br>
+      Combining emotion, art, and storytelling — to show that creation has no limits.
+    </p>
+  </main>
+
+  <footer>© 2025 irCYStudio | Rainbow Legacy Lite</footer>
+
+  <script>
+    // Page switch
+    function show(id) {
+      document.querySelectorAll('main').forEach(m => m.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+    }
+
+    // Floating particles for "dreamy" feel
+    const canvas = document.getElementById("particles");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+    const num = 40;
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    for (let i = 0; i < num; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2 + 0.5,
+        dx: (Math.random() - 0.5) * 0.3,
+        dy: (Math.random() - 0.5) * 0.3,
+        color: `hsl(${Math.random() * 360}, 80%, 60%)`
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let p of particles) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+</body>
+</html>
